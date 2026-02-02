@@ -30,12 +30,28 @@ export function GaleriaReal() {
             download: true,
             header: true,
             complete: (res) => {
+                console.log("Datos del CSV:", res.data); // Debugging
+
                 const validas = res.data
-                    .filter((row: any) => row['Tu foto']?.includes('drive.google.com'))
+                    .filter((row: any) => {
+                        // Buscar dinámicamente cualquier columna que parezca un link de Drive
+                        return Object.values(row).some((val: any) =>
+                            typeof val === 'string' && val.includes('drive.google.com')
+                        );
+                    })
                     .map((row: any) => {
-                        const url = row['Tu foto'];
+                        // Encontrar la URL exacta
+                        const url = Object.values(row).find((val: any) =>
+                            typeof val === 'string' && val.includes('drive.google.com')
+                        ) as string;
+
+                        console.log("URL encontrada:", url);
+
                         // Extraer ID de archivo de Drive
-                        // Formatos usuales: id=XXX o /d/XXX/view
+                        // Formatos manejados: 
+                        // open?id=XXX
+                        // uc?id=XXX
+                        // file/d/XXX/view
                         let id = '';
                         if (url.includes('id=')) {
                             id = url.split('id=')[1];
@@ -43,14 +59,25 @@ export function GaleriaReal() {
                             id = url.split('/d/')[1].split('/')[0];
                         }
 
-                        // Limpiar ID si tiene extras
+                        // Limpiar ID de parámetros extra (&)
                         id = id.split('&')[0];
+
+                        // Buscar nombre del autor (cualquier columna que no sea la URL y no sea Timestamp)
+                        const possibleName = Object.entries(row).find(([key, val]) =>
+                            key !== 'Marca temporal' &&
+                            key !== 'Timestamp' &&
+                            val !== url &&
+                            typeof val === 'string' &&
+                            val.length < 50 // Heurística simple
+                        );
+
+                        const author = possibleName ? possibleName[1] as string : 'Invitado';
 
                         return {
                             id,
                             viewUrl: `https://drive.google.com/uc?export=view&id=${id}`,
                             downloadUrl: `https://drive.google.com/uc?export=download&id=${id}`,
-                            author: row['Nombre'] || 'Invitado' // Asumiendo columna Nombre
+                            author: author
                         };
                     });
 
