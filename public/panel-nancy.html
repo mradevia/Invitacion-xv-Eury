@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel Nancy - Generador de Invitaciones</title>
+    <style>
+        :root {
+            --gold: #d4af37;
+            --dark-blue: #050a14;
+            --light-gold: #f2d06b;
+            --input-bg: #0c1525;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: radial-gradient(circle at top, #1a2a44 0%, var(--dark-blue) 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background: rgba(10, 25, 47, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            border-radius: 30px;
+            padding: 40px;
+            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.8);
+        }
+
+        h1 {
+            color: var(--gold);
+            margin-bottom: 10px;
+            font-weight: 300;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            text-align: center;
+            font-size: 2.5rem;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--gold);
+            opacity: 0.6;
+            margin-bottom: 30px;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+        }
+
+        .group {
+            text-align: left;
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 12px;
+            color: var(--gold);
+            font-size: 0.95rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            padding: 16px 20px;
+            background-color: var(--input-bg);
+            border: 2px solid rgba(212, 175, 55, 0.3);
+            border-radius: 16px;
+            color: #ffffff;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        input::placeholder {
+            color: rgba(212, 175, 55, 0.3);
+        }
+
+        input:focus,
+        select:focus {
+            border-color: var(--gold);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+            background-color: #0e1a30;
+        }
+
+        select {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23d4af37' stroke-width='2'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 20px;
+            padding-right: 45px;
+            cursor: pointer;
+        }
+
+        select option {
+            background-color: #050a14;
+            color: white;
+            padding: 10px;
+        }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 30px;
+        }
+
+        button {
+            padding: 18px 24px;
+            border: none;
+            border-radius: 16px;
+            color: #000;
+            font-size: 0.95rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            letter-spacing: 1px;
+            border: 2px solid transparent;
+        }
+
+        .btn-copy {
+            background: linear-gradient(135deg, #d4af37 0%, #f2d06b 100%);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .btn-copy:hover:not(:disabled) {
+            box-shadow: 0 15px 40px rgba(212, 175, 55, 0.5);
+            transform: translateY(-3px);
+        }
+
+        .btn-whatsapp {
+            background: linear-gradient(135deg, #25d366 0%, #20ba5a 100%);
+            color: white;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .btn-whatsapp:hover:not(:disabled) {
+            box-shadow: 0 15px 40px rgba(37, 211, 102, 0.5);
+            transform: translateY(-3px);
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        button:active:not(:disabled) {
+            transform: scale(0.96);
+        }
+
+        .result-box {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 2px dashed var(--gold);
+            border-radius: 16px;
+            display: none;
+            animation: slideUp 0.4s ease-out;
+        }
+
+        .result-box.show {
+            display: block;
+        }
+
+        .result-title {
+            color: var(--light-gold);
+            margin: 0 0 12px 0;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .result-subtitle {
+            font-size: 0.8rem;
+            opacity: 0.7;
+            margin-bottom: 8px;
+            color: var(--gold);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .link-text {
+            word-break: break-all;
+            font-size: 0.9rem;
+            color: var(--light-gold);
+            font-family: 'Courier New', Courier, monospace;
+            line-height: 1.5;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 12px;
+            border-radius: 8px;
+            border-left: 3px solid var(--gold);
+            cursor: copy;
+            transition: all 0.3s ease;
+        }
+
+        .link-text:hover {
+            background: rgba(212, 175, 55, 0.1);
+            border-left-color: var(--light-gold);
+        }
+
+        .copy-feedback {
+            display: inline-block;
+            margin-left: 10px;
+            color: #4ade80;
+            font-size: 0.85rem;
+            animation: fadeInOut 2s ease-in-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInOut {
+
+            0%,
+            100% {
+                opacity: 0;
+            }
+
+            10%,
+            90% {
+                opacity: 1;
+            }
+        }
+
+        .info-box {
+            margin-top: 25px;
+            padding: 15px;
+            background: rgba(212, 175, 55, 0.05);
+            border-left: 3px solid var(--gold);
+            border-radius: 8px;
+            font-size: 0.85rem;
+            color: var(--gold);
+            opacity: 0.8;
+        }
+
+        .info-box strong {
+            color: var(--light-gold);
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 25px;
+                border-radius: 20px;
+            }
+
+            h1 {
+                font-size: 1.8rem;
+                margin-bottom: 8px;
+            }
+
+            .button-group {
+                grid-template-columns: 1fr;
+            }
+
+            button {
+                padding: 14px 20px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>👑 Panel Nancy</h1>
+        <p class="subtitle">Generador de Invitaciones</p>
+
+        <div class="group">
+            <label>Nombre del Invitado/Familia:</label>
+            <input type="text" id="guestName" placeholder="Ej: Familia Rivera" autocomplete="off">
+        </div>
+
+        <div class="group">
+            <label>Boletos Reservados (Máx 9):</label>
+            <select id="guestSeats">
+                <option value="1">1 Boleto</option>
+                <option value="2">2 Boletos</option>
+                <option value="3">3 Boletos</option>
+                <option value="4">4 Boletos</option>
+                <option value="5" selected>5 Boletos (Predeterminado)</option>
+                <option value="6">6 Boletos</option>
+                <option value="7">7 Boletos</option>
+                <option value="8">8 Boletos</option>
+                <option value="9">9 Boletos</option>
+            </select>
+        </div>
+
+        <div class="button-group">
+            <button class="btn-copy" onclick="copyLink()" id="copyBtn" disabled>Copiar Link</button>
+            <button class="btn-whatsapp" onclick="sendWhatsApp()" id="whatsappBtn" disabled>WhatsApp</button>
+        </div>
+
+        <div id="result" class="result-box">
+            <p class="result-title">✅ Link Generado</p>
+            <p class="result-subtitle">URL personalizada:</p>
+            <div id="finalLink" class="link-text" onclick="copyLink()" title="Click para copiar"></div>
+        </div>
+
+        <div class="info-box">
+            <strong>💡 Cómo usar:</strong><br>
+            Ingresa el nombre y los boletos, luego copia el link o envía por WhatsApp. El invitado recibirá un mensaje
+            personalizado con su nombre y la cantidad de asientos que puede confirmar.
+        </div>
+    </div>
+
+    <script>
+        // URL BASE - Detecta automáticamente la dirección (IP local o dominio)
+        const BASE_URL = window.location.origin;
+
+        const guestNameInput = document.getElementById('guestName');
+        const guestSeatsSelect = document.getElementById('guestSeats');
+        const resultBox = document.getElementById('result');
+        const finalLinkDiv = document.getElementById('finalLink');
+        const copyBtn = document.getElementById('copyBtn');
+        const whatsappBtn = document.getElementById('whatsappBtn');
+
+        // Habilitar/deshabilitar botones según si hay nombre
+        guestNameInput.addEventListener('input', () => {
+            const hasName = guestNameInput.value.trim().length > 0;
+            copyBtn.disabled = !hasName;
+            whatsappBtn.disabled = !hasName;
+        });
+
+        // Generar URL personalizada
+        function generateUrl() {
+            const name = guestNameInput.value.trim();
+            if (!name) return '';
+            const seats = guestSeatsSelect.value;
+
+            // Detectar si estamos en un subdirectorio (GitHub Pages) o raíz (Vercel/Local)
+            // Eliminamos 'public/panel-nancy.html' o 'panel-nancy.html' del path actual para obtener la base limpia
+            let baseUrl = window.location.href
+                .replace(/\/public\/panel-nancy\.html$/, '')
+                .replace(/\/panel-nancy\.html$/, '');
+
+            // Asegurar que no termine en slash
+            if (baseUrl.endsWith('/')) {
+                baseUrl = baseUrl.slice(0, -1);
+            }
+
+            return `${baseUrl}/?n=${encodeURIComponent(name)}&c=${seats}`;
+        }
+
+        // Mostrar resultado
+        function showResult() {
+            const url = generateUrl();
+            if (!url) return;
+
+            finalLinkDiv.innerText = url;
+            resultBox.classList.add('show');
+        }
+
+        // Copiar link al portapapeles
+        function copyLink() {
+            const url = generateUrl();
+            if (!url) {
+                alert("Por favor, ingresa un nombre.");
+                return;
+            }
+
+            navigator.clipboard.writeText(url).then(() => {
+                showResult();
+                const btn = document.getElementById('copyBtn');
+                const originalText = btn.innerText;
+                btn.innerText = '✓ Copiado';
+
+                setTimeout(() => {
+                    btn.innerText = originalText;
+                }, 2000);
+            }).catch(err => {
+                console.error('Error al copiar:', err);
+                alert("Error al copiar. Por favor intenta de nuevo.");
+            });
+        }
+
+        // Enviar por WhatsApp
+        function sendWhatsApp() {
+            const name = guestNameInput.value.trim();
+            const seats = guestSeatsSelect.value;
+            const url = generateUrl();
+
+            if (!url) {
+                alert("Por favor, ingresa un nombre.");
+                return;
+            }
+
+            // Mensaje elegante
+            const message = `¡Hola ${name}! 👑
+
+Es un honor invitarles a celebrar los *15 años de Eury*. Queremos que formen parte de nuestra Corte Real en este día tan especial.
+
+Hemos reservado *${seats}* lugares para ustedes. Por favor, confirmen cuántos de ustedes asistirán y sus nombres en el siguiente enlace:
+
+🔗 ${url}
+
+¡Esperamos verlos pronto!`;
+
+            // Crear enlace de WhatsApp
+            const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(message)}`;
+
+            showResult();
+            window.open(whatsappUrl, '_blank');
+        }
+
+        // Mostrar resultado cuando se cambia el nombre
+        guestNameInput.addEventListener('input', showResult);
+        guestSeatsSelect.addEventListener('change', showResult);
+
+        // Permitir enviar con Enter en el input
+        guestNameInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                copyLink();
+            }
+        });
+    </script>
+
+</body>
+
+</html>
