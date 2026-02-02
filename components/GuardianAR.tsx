@@ -17,6 +17,9 @@ export const GuardianAR = () => {
   const modelViewerRef = useRef<any>(null)
   const sectionRef = useRef<HTMLElement>(null)
   const [shouldLoadModel, setShouldLoadModel] = useState(false)
+  const [loadingProgress, setLoadingProgress] = useState(0)
+  const [isModelLoaded, setIsModelLoaded] = useState(false)
+  const [showLoadedMessage, setShowLoadedMessage] = useState(false)
 
   useEffect(() => {
     // Solo cargar cuando la sección sea visible
@@ -43,6 +46,35 @@ export const GuardianAR = () => {
       script.type = 'module'
       script.src = 'https://ajax.googleapis.com/ajax/libs/model-viewer/3.5.0/model-viewer.min.js'
       document.head.appendChild(script)
+    }
+  }, [shouldLoadModel])
+
+  useEffect(() => {
+    const modelViewer = modelViewerRef.current
+    if (!modelViewer) return
+
+    const handleProgress = (event: any) => {
+      const progress = event.detail.totalProgress * 100
+      setLoadingProgress(Math.round(progress))
+    }
+
+    const handleLoad = () => {
+      setIsModelLoaded(true)
+      setShowLoadedMessage(true)
+      setLoadingProgress(100)
+
+      // Ocultar mensaje después de 3 segundos
+      setTimeout(() => {
+        setShowLoadedMessage(false)
+      }, 3000)
+    }
+
+    modelViewer.addEventListener('progress', handleProgress)
+    modelViewer.addEventListener('load', handleLoad)
+
+    return () => {
+      modelViewer.removeEventListener('progress', handleProgress)
+      modelViewer.removeEventListener('load', handleLoad)
     }
   }, [shouldLoadModel])
 
@@ -136,6 +168,94 @@ export const GuardianAR = () => {
                 >
                   📱 Ver en Realidad Aumentada
                 </button>
+
+                {/* Loading Progress Bar */}
+                {!isModelLoaded && loadingProgress < 100 && (
+                  <div
+                    style={{
+                      position: 'absolute',
+                      top: '16px',
+                      left: '16px',
+                      right: '16px',
+                      backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                      borderRadius: '8px',
+                      padding: '12px',
+                      backdropFilter: 'blur(10px)',
+                    }}
+                  >
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '12px',
+                      marginBottom: '8px'
+                    }}>
+                      <Camera className="w-5 h-5 text-gold-400 animate-pulse" />
+                      <span style={{
+                        color: '#d4af37',
+                        fontSize: '14px',
+                        fontWeight: 'bold'
+                      }}>
+                        Cargando modelo 3D...
+                      </span>
+                    </div>
+                    <div style={{
+                      width: '100%',
+                      height: '6px',
+                      backgroundColor: 'rgba(212, 175, 55, 0.2)',
+                      borderRadius: '3px',
+                      overflow: 'hidden'
+                    }}>
+                      <div style={{
+                        width: `${loadingProgress}%`,
+                        height: '100%',
+                        backgroundColor: '#d4af37',
+                        transition: 'width 0.3s ease',
+                        boxShadow: '0 0 10px rgba(212, 175, 55, 0.5)'
+                      }} />
+                    </div>
+                    <div style={{
+                      color: '#d4af37',
+                      fontSize: '12px',
+                      marginTop: '4px',
+                      textAlign: 'right'
+                    }}>
+                      {loadingProgress}%
+                    </div>
+                  </div>
+                )}
+
+                {/* Loaded Success Message */}
+                {showLoadedMessage && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -20 }}
+                    style={{
+                      position: 'absolute',
+                      top: '16px',
+                      left: '50%',
+                      transform: 'translateX(-50%)',
+                      backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                      borderRadius: '50px',
+                      padding: '12px 24px',
+                      backdropFilter: 'blur(10px)',
+                      border: '2px solid #d4af37',
+                      boxShadow: '0 4px 20px rgba(212, 175, 55, 0.4)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '8px'
+                    }}
+                  >
+                    <span style={{ fontSize: '20px' }}>✅</span>
+                    <span style={{
+                      color: '#d4af37',
+                      fontSize: '14px',
+                      fontWeight: 'bold'
+                    }}>
+                      ¡Modelo cargado!
+                    </span>
+                  </motion.div>
+                )}
               </model-viewer>
             ) : (
               <div className="w-full h-[400px] flex items-center justify-center bg-gradient-to-b from-royal-900/50 to-royal-950/50">
