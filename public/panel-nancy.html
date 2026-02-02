@@ -367,8 +367,8 @@
             let path = window.location.pathname;
 
             // Reemplazo robusto para cualquier variante del nombre del panel
-            path = path.replace(/\/public\/panel-nancy(\.html)?$/i, '')
-                .replace(/\/panel-nancy(\.html)?$/i, '');
+            path = path.replace(/\/public\/panel-nancy(\.html)?\/?$/i, '')
+                .replace(/\/panel-nancy(\.html)?\/?$/i, '');
 
             // Asegurar que no termine en slash
             if (path.endsWith('/')) {
