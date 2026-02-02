@@ -73,13 +73,25 @@ export function GaleriaReal() {
 
                         const author = possibleName ? possibleName[1] as string : 'Invitado';
 
+                        // Generar múltiples formatos de URL para mayor compatibilidad
+                        const viewUrl = `https://lh3.googleusercontent.com/d/${id}=s1000`;
+                        const fallbackUrl = `https://drive.google.com/uc?export=view&id=${id}`;
+
+                        console.log("URL original:", url);
+                        console.log("ID extraído:", id);
+                        console.log("URL final (thumbnail):", viewUrl);
+                        console.log("URL fallback:", fallbackUrl);
+
                         return {
                             id,
-                            viewUrl: `https://drive.google.com/uc?export=view&id=${id}`,
+                            viewUrl,
                             downloadUrl: `https://drive.google.com/uc?export=download&id=${id}`,
                             author: author
                         };
                     });
+
+                console.log("Total fotos válidas:", validas.length);
+                console.log("Fotos procesadas:", validas);
 
                 // Invertir para mostrar las más nuevas primero
                 setFotos(validas.reverse());
