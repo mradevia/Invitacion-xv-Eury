@@ -171,13 +171,11 @@ export function GaleriaReal() {
                         >
                             {/* Imagen */}
                             <div className="relative w-full h-full">
-                                <Image
+                                <img
                                     src={foto.viewUrl}
                                     alt={`Foto por ${foto.author}`}
-                                    fill
-                                    className="object-cover transition-transform duration-700 group-hover:scale-110"
-                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                    unoptimized={true} // Obligatorio para Google Drive images
+                                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                    loading="lazy"
                                 />
                             </div>
 
@@ -225,12 +223,10 @@ export function GaleriaReal() {
                     >
                         <div className="relative w-full max-w-5xl h-[80vh]">
                             {fotos.find(f => f.id === selectedId) && (
-                                <Image
+                                <img
                                     src={fotos.find(f => f.id === selectedId)!.viewUrl}
                                     alt="Vista completa"
-                                    fill
-                                    className="object-contain"
-                                    unoptimized={true}
+                                    className="w-full h-full object-contain"
                                 />
                             )}
                         </div>
