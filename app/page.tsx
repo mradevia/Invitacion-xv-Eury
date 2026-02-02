@@ -18,6 +18,7 @@ import { GallerySection } from "@/components/sections/gallery-section"
 import { ItinerarySection } from "@/components/sections/itinerary-section"
 import { GiftsSection } from "@/components/sections/gifts-section"
 import { RSVPSection } from "@/components/sections/rsvp-section"
+import { GaleriaReal } from "@/components/sections/galeria-real"
 
 // Lazy load heavy components with loading states
 const GuardianAR = dynamic(
@@ -281,6 +282,7 @@ export default function XVInvitation() {
             <QuoteSection />
             <EventsSection />
             <GallerySection />
+            <GaleriaReal />
             <ItinerarySection />
             <GiftsSection />
             <GuardianAR />

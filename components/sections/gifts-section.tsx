@@ -176,7 +176,7 @@ export function GiftsSection() {
                   }}
                 >
                   <Image
-                    src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://photos.google.com"
+                    src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://docs.google.com/forms/d/e/1FAIpQLSc_GYnnwNTNpFqvkvtgIhdUU1UD6z0P5YLwZMvAd4BN68p3fQ/viewform"
                     alt="QR Album"
                     fill
                     className="object-cover rounded"
