@@ -175,13 +175,11 @@ export function GiftsSection() {
                       : "0 10px 30px rgba(0,0,0,0.3)"
                   }}
                 >
-                  <Image
+                  <img
                     src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://docs.google.com/forms/d/e/1FAIpQLSc_GYnnwNTNpFqvkvtgIhdUU1UD6z0P5YLwZMvAd4BN68p3fQ/viewform"
                     alt="QR Album"
-                    fill
-                    className="object-cover rounded"
+                    className="w-full h-full object-cover rounded"
                     loading="lazy"
-                    quality={90}
                   />
 
                   {/* Hover Overlay */}

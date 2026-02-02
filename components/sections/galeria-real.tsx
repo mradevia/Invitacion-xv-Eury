@@ -245,7 +245,7 @@ export function GaleriaReal() {
                             <p className="text-gold-200/60 text-sm mb-6">Comparte tus fotos desde tu celular</p>
 
                             <div className="bg-white p-4 rounded-xl inline-block mb-4 shadow-inner">
-                                <Image
+                                <img
                                     src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(GOOGLE_FORM_URL)}`}
                                     alt="QR Upload"
                                     width={200}
