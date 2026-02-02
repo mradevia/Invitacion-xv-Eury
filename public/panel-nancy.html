@@ -355,17 +355,27 @@
             if (!name) return '';
             const seats = guestSeatsSelect.value;
 
-            // Detectar si estamos en un subdirectorio (GitHub Pages) o raíz (Vercel/Local)
-            // Eliminamos 'public/panel-nancy.html' o 'panel-nancy.html' del path actual para obtener la base limpia
-            let baseUrl = window.location.href
-                .replace(/\/public\/panel-nancy\.html$/, '')
-                .replace(/\/panel-nancy\.html$/, '');
+            // Obtener el origen (protocolo + dominio)
+            // Ejemplo: https://mi-invitacion.vercel.app
+            const origin = window.location.origin;
+
+            // Obtener el path actual pero limpiar el nombre del archivo del panel
+            // Esto maneja:
+            // - /panel-nancy.html (local/static)
+            // - /panel-nancy (Vercel clean URLs)
+            // - /repo/panel-nancy.html (GitHub Pages)
+            let path = window.location.pathname;
+
+            // Reemplazo robusto para cualquier variante del nombre del panel
+            path = path.replace(/\/public\/panel-nancy(\.html)?$/i, '')
+                .replace(/\/panel-nancy(\.html)?$/i, '');
 
             // Asegurar que no termine en slash
-            if (baseUrl.endsWith('/')) {
-                baseUrl = baseUrl.slice(0, -1);
+            if (path.endsWith('/')) {
+                path = path.slice(0, -1);
             }
 
+            const baseUrl = origin + path;
             return `${baseUrl}/?n=${encodeURIComponent(name)}&c=${seats}`;
         }
 
