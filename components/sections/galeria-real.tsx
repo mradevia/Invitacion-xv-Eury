@@ -283,7 +283,7 @@ export function GaleriaReal() {
 
                             <div className="bg-white p-4 rounded-xl inline-block mb-4 shadow-inner">
                                 <img
-                                    src={`https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(GOOGLE_FORM_URL)}`}
+                                    src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=https://invitacion-xv-eury.vercel.app/fotos"
                                     alt="QR Upload"
                                     width={200}
                                     height={200}

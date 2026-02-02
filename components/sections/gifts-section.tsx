@@ -176,7 +176,7 @@ export function GiftsSection() {
                   }}
                 >
                   <img
-                    src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://docs.google.com/forms/d/e/1FAIpQLSc_GYnnwNTNpFqvkvtgIhdUU1UD6z0P5YLwZMvAd4BN68p3fQ/viewform"
+                    src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://invitacion-xv-eury.vercel.app/fotos"
                     alt="QR Album"
                     className="w-full h-full object-cover rounded"
                     loading="lazy"
