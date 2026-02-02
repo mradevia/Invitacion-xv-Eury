@@ -146,6 +146,7 @@ export const GuardianAR = () => {
                   loading="eager"
                   camera-controls
                   auto-rotate
+                  autoplay // <--- MOVIMIENTO ACTIVADO
                   rotation="0 0 0"
                   shadow-intensity="1"
                   ar-placement="floor"
