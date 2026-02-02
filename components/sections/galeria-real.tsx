@@ -176,6 +176,7 @@ export function GaleriaReal() {
                                     alt={`Foto por ${foto.author}`}
                                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                                     loading="lazy"
+                                    referrerPolicy="no-referrer"
                                 />
                             </div>
 
@@ -227,6 +228,7 @@ export function GaleriaReal() {
                                     src={fotos.find(f => f.id === selectedId)!.viewUrl}
                                     alt="Vista completa"
                                     className="w-full h-full object-contain"
+                                    referrerPolicy="no-referrer"
                                 />
                             )}
                         </div>
